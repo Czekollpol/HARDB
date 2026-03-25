@@ -20,7 +20,10 @@ class TicketModal(discord.ui.Modal, title="Formularz Rekrutacyjny"):
     imie = discord.ui.TextInput(label="Imię i nazwisko (IC)")
     uid = discord.ui.TextInput(label="UID")
     wiek = discord.ui.TextInput(label="Wiek OOC")
-    powod = discord.ui.TextInput(label="Dlaczego chcesz dołączyć?", style=discord.TextStyle.paragraph)
+    powod = discord.ui.TextInput(
+        label="Dlaczego chcesz dołączyć?",
+        style=discord.TextStyle.paragraph
+    )
 
     async def on_submit(self, interaction: discord.Interaction):
         guild = interaction.guild
@@ -28,12 +31,20 @@ class TicketModal(discord.ui.Modal, title="Formularz Rekrutacyjny"):
 
         overwrites = {
             guild.default_role: discord.PermissionOverwrite(view_channel=False),
-            user: discord.PermissionOverwrite(view_channel=True, send_messages=True, read_message_history=True),
+            user: discord.PermissionOverwrite(
+                view_channel=True,
+                send_messages=True,
+                read_message_history=True
+            ),
         }
 
         if STAFF_ROLE_ID:
             role = guild.get_role(STAFF_ROLE_ID)
-            overwrites[role] = discord.PermissionOverwrite(view_channel=True, send_messages=True, read_message_history=True)
+            overwrites[role] = discord.PermissionOverwrite(
+                view_channel=True,
+                send_messages=True,
+                read_message_history=True
+            )
 
         channel = await guild.create_text_channel(
             name=f"ticket-{user.name}",
@@ -41,7 +52,11 @@ class TicketModal(discord.ui.Modal, title="Formularz Rekrutacyjny"):
             overwrites=overwrites
         )
 
-        embed = discord.Embed(title="📋 Nowe zgłoszenie", color=discord.Color.blue())
+        embed = discord.Embed(
+            title="📋 Nowe zgłoszenie",
+            color=discord.Color.blue()
+        )
+
         embed.add_field(name="Imię i nazwisko", value=self.imie, inline=False)
         embed.add_field(name="UID", value=self.uid, inline=False)
         embed.add_field(name="Wiek OOC", value=self.wiek, inline=False)
@@ -56,13 +71,16 @@ class TicketModal(discord.ui.Modal, title="Formularz Rekrutacyjny"):
         )
 
 
-# ===================== PANEL + BUTTON =====================
+# ===================== BUTTON =====================
 
 class TicketView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="Otwórz ticket", style=discord.ButtonStyle.green)
+    @discord.ui.button(
+        label="Otwórz ticket",
+        style=discord.ButtonStyle.green
+    )
     async def open_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(TicketModal())
 
@@ -78,10 +96,10 @@ async def tickety(interaction: discord.Interaction):
             "Witaj w systemie ticketów HAZARD!\n\n"
             "Kliknij przycisk poniżej, aby otworzyć nowy ticket i złożyć wniosek o rangę.\n\n"
             "**Instrukcje:**\n"
-            "• Wypełnij wszystkie pola w formularzu\n"
-            "• Podaj prawdziwe informacje\n"
-            "• Czekaj na odpowiedź zarządu\n\n"
-            "**Uwaga:** Fałszywe informacje mogą skutkować odrzuceniem wniosku."
+            "• Wypełnij formularz\n"
+            "• Podaj prawdziwe dane\n"
+            "• Czekaj na odpowiedź administracji\n\n"
+            "**Uwaga:** Fałszywe informacje = odrzucenie."
         ),
         color=discord.Color.green()
     )
@@ -91,7 +109,7 @@ async def tickety(interaction: discord.Interaction):
 
 # ===================== ACCEPT =====================
 
-@bot.tree.command(name="accept", description="Akceptuj zgłoszenie")
+@bot.tree.command(name="accept", description="Akceptuj rekrutację")
 async def accept(
     interaction: discord.Interaction,
     user: discord.Member,
@@ -118,15 +136,21 @@ async def accept(
     try:
         await user.send(embed=embed)
     except:
-        await interaction.response.send_message("❌ Nie mogę wysłać DM do usera", ephemeral=True)
+        await interaction.response.send_message(
+            "❌ Nie mogę wysłać DM do użytkownika",
+            ephemeral=True
+        )
         return
 
-    await interaction.response.send_message("✅ Wysłano akceptację", ephemeral=True)
+    await interaction.response.send_message(
+        "✅ Wysłano akceptację",
+        ephemeral=True
+    )
 
 
 # ===================== DENY =====================
 
-@bot.tree.command(name="deny", description="Odrzuć zgłoszenie")
+@bot.tree.command(name="deny", description="Odrzuć rekrutację")
 async def deny(interaction: discord.Interaction, user: discord.Member):
 
     embed = discord.Embed(
@@ -138,10 +162,16 @@ async def deny(interaction: discord.Interaction, user: discord.Member):
     try:
         await user.send(embed=embed)
     except:
-        await interaction.response.send_message("❌ Nie mogę wysłać DM do usera", ephemeral=True)
+        await interaction.response.send_message(
+            "❌ Nie mogę wysłać DM do użytkownika",
+            ephemeral=True
+        )
         return
 
-    await interaction.response.send_message("❌ Odrzucono zgłoszenie", ephemeral=True)
+    await interaction.response.send_message(
+        "❌ Odrzucono zgłoszenie",
+        ephemeral=True
+    )
 
 
 # ===================== READY =====================
