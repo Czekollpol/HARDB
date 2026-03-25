@@ -1,9 +1,11 @@
 import discord
 from discord.ext import commands
+import os
 
-TOKEN = "MTQ2OTA3MDIyOTE2OTYzNTU0NA.G1nBTy.c55BtNVw8Jo3TB8v6OZIevptOt11cSm3M_kZAE"
-STAFF_ROLE_ID = 1468284972006641755   # ID admina (opcjonalnie)
-CATEGORY_ID = 1486389862193168535    # ID kategorii ticketów
+TOKEN = os.getenv("DISCORD_TOKEN")
+
+STAFF_ROLE_ID = 1468284972006641755
+CATEGORY_ID = 1486389862193168535
 
 intents = discord.Intents.default()
 intents.members = True
